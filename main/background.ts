@@ -1,5 +1,5 @@
 import path from "path";
-import { app, ipcMain } from "electron";
+import { BrowserView, BrowserWindow, app, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 
@@ -35,6 +35,16 @@ let mainWindow;
   }
 })();
 
+let webWindow;
+
+app.whenReady().then(() => {
+  webWindow = new BrowserView();
+  mainWindow.setBrowserView(webWindow);
+  webWindow.setBounds({ x: 0, y: 84, width: 1000, height: 516 });
+  webWindow.setAutoResize({ width: true, height: true });
+  webWindow.webContents.loadURL("https://google.com");
+});
+
 app.on("window-all-closed", () => {
   app.quit();
 });
@@ -49,6 +59,11 @@ ipcMain.on("maximize", () => {
 
 ipcMain.on("minimize", () => {
   mainWindow.minimize();
+});
+
+ipcMain.on("navigate-to", (event, value) => {
+  console.log(value);
+  webWindow.webContents.loadURL(value);
 });
 
 ipcMain.on("message", async (event, arg) => {
