@@ -1,37 +1,65 @@
-import React from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
+import React from "react";
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
+import { Button } from "antd";
 
-export default function HomePage() {
+import { ipcRenderer } from "electron";
+
+export default function HomePage(props: any) {
   return (
     <React.Fragment>
       <Head>
-        <title>Home - Nextron (with-tailwindcss)</title>
+        <title>Browser</title>
       </Head>
-      <div className="grid grid-col-1 text-2xl w-full text-center">
-        <div>
-          <Image
-            className="ml-auto mr-auto"
-            src="/images/logo.png"
-            alt="Logo image"
-            width="256px"
-            height="256px"
-          />
+      <div className="flex flex-row w-full">
+        <div className="flex gap-1" id="tabs"></div>
+        <div className="titlebar grow"></div>
+        <div className="">
+          <Button
+            type="text"
+            shape="round"
+            size="small"
+            className="opacity-50 hover:opacity-100 b-minimize"
+            onClick={() => window.ipc.send("minimize", "")}
+          >
+            <img
+              src="/images/minimize-icon.svg"
+              alt="minimize icon"
+              width={15}
+              className="invert"
+            />
+          </Button>
+          <Button
+            type="text"
+            shape="round"
+            size="small"
+            className="opacity-50 hover:opacity-100 b-expand"
+            onClick={() => window.ipc.send("maximize", "")}
+          >
+            <img
+              src="/images/expand-icon.svg"
+              alt="expand icon"
+              className="-scale-x-100 invert"
+              width={15}
+            />
+          </Button>
+          <Button
+            type="text"
+            shape="round"
+            size="small"
+            className="opacity-50 hover:opacity-100 b-close"
+            onClick={() => window.ipc.send("close", "")}
+          >
+            <img
+              src="/images/close-icon.svg"
+              alt="close icon"
+              width={15}
+              className="invert"
+            />
+          </Button>
         </div>
-        <span>⚡ Electron ⚡</span>
-        <span>+</span>
-        <span>Next.js</span>
-        <span>+</span>
-        <span>tailwindcss</span>
-        <span>=</span>
-        <span>💕 </span>
-      </div>
-      <div className="mt-1 w-full flex-wrap flex justify-center">
-        <Link href="/next">
-          <a className="btn-blue">Go to next page</a>
-        </Link>
       </div>
     </React.Fragment>
-  )
+  );
 }
