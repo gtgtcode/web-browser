@@ -1,8 +1,11 @@
 import { Button } from "antd";
 
-export default function WindowControls() {
+export default function WindowControls(props: {
+  URLArray: string[];
+  setURLArray: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
   return (
-    <div className="p-2">
+    <div className="p-2 text-nowrap">
       {" "}
       <Button
         type="text"

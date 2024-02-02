@@ -40,9 +40,30 @@ let webWindow;
 app.whenReady().then(() => {
   webWindow = new BrowserView();
   mainWindow.setBrowserView(webWindow);
-  webWindow.setBounds({ x: 0, y: 84, width: 1000, height: 516 });
+  webWindow.setBounds({ x: 0, y: 92, width: 1000, height: 508 });
   webWindow.setAutoResize({ width: true, height: true });
   webWindow.webContents.loadURL("https://google.com");
+
+  webWindow.webContents.on("did-start-navigation", (event, value) => {
+    try {
+      console.log(value);
+      ipcMain.emit("navigated-url", value);
+    } catch (error) {
+      console.error("Error emitting navigated-url event:", error);
+    }
+  });
+
+  ipcMain.on("refresh-page", () => {
+    webWindow.webContents.reload();
+  });
+
+  ipcMain.on("go-back", () => {
+    webWindow.webContents.canGoBack() && webWindow.webContents.goBack();
+  });
+
+  ipcMain.on("go-forward", () => {
+    webWindow.webContents.canGoForward() && webWindow.webContents.goForward();
+  });
 });
 
 app.on("window-all-closed", () => {
@@ -62,7 +83,6 @@ ipcMain.on("minimize", () => {
 });
 
 ipcMain.on("navigate-to", (event, value) => {
-  console.log(value);
   webWindow.webContents.loadURL(value);
 });
 

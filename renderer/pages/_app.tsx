@@ -32,15 +32,24 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div
       className={
         currentTheme === "dark"
-          ? "bg-zinc-900 text-white transition-all"
+          ? "bg-zinc-800 text-white transition-all"
           : "transition-all"
       }
     >
-      <Component
-        {...pageProps}
-        currentTheme={currentTheme}
-        setTheme={handleThemeChange}
-      />
+      <ConfigProvider
+        theme={{
+          algorithm:
+            currentTheme === "dark"
+              ? theme.darkAlgorithm
+              : theme.defaultAlgorithm,
+        }}
+      >
+        <Component
+          {...pageProps}
+          currentTheme={currentTheme}
+          setTheme={handleThemeChange}
+        />
+      </ConfigProvider>
     </div>
   );
 }

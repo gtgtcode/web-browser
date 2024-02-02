@@ -1,9 +1,11 @@
-import { Input } from "antd";
-import { useState } from "react";
+import { Button, Input } from "antd";
+import { useEffect, useState } from "react";
 
-export default function BrowserControls() {
+export default function BrowserControls(props: {
+  URLArray: string[];
+  setURLArray: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
   const [URLInput, setURLInput] = useState("https://www.google.com");
-  const [currentWebsite, setCurrentWebsite] = useState("");
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -15,15 +17,58 @@ export default function BrowserControls() {
         // If the URL doesn't start with http:// or https://, prepend https://
         inputURL = "https://" + inputURL;
       }
-      setCurrentWebsite(inputURL);
+      props.setURLArray([inputURL]);
       window.ipc.send("navigate-to", inputURL);
     }
   };
 
   return (
     <div>
-      <div className="h-[40px] border-t border-zinc-800 p-1">
+      <div className="h-[50px] bg-zinc-700 p-1 flex rounded-t-xl items-center">
+        <div className="align-middle inline-block gap-1 flex mx-2">
+          {" "}
+          <Button
+            type="text"
+            shape="circle"
+            className="opacity-50 hover:opacity-100 b-minimize"
+            onClick={() => window.ipc.send("go-back", "")}
+          >
+            <img
+              src="/images/arrow-back.svg"
+              alt="minimize icon"
+              width={18}
+              className="invert mx-auto"
+            />
+          </Button>
+          <Button
+            type="text"
+            shape="circle"
+            className="opacity-50 hover:opacity-100 b-minimize"
+            onClick={() => window.ipc.send("go-forward", "")}
+          >
+            <img
+              src="/images/arrow-forward.svg"
+              alt="minimize icon"
+              width={18}
+              className="invert mx-auto"
+            />
+          </Button>
+          <Button
+            type="text"
+            shape="circle"
+            className="opacity-50 hover:opacity-100 b-minimize"
+            onClick={() => window.ipc.send("refresh-page", "")}
+          >
+            <img
+              src="/images/refresh.svg"
+              alt="minimize icon"
+              width={18}
+              className="invert mx-auto"
+            />
+          </Button>
+        </div>
         <Input
+          className="block my-auto basis-3/4"
           value={URLInput}
           onChange={(e) => setURLInput(e.target.value)}
           onPressEnter={handleKeyPress}
