@@ -17,6 +17,8 @@ let mainWindow;
   await app.whenReady();
 
   mainWindow = createWindow("main", {
+    minWidth: 550,
+    minHeight: 400,
     width: 1000,
     height: 600,
     frame: false,
