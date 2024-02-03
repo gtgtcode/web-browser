@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,6 +16,21 @@ export default function HomePage(props: any) {
     "https://facebook.com",
     "https://google.com",
   ]);
+
+  class PageControls {
+    refreshPage() {
+      webContainer.current?.reload();
+    }
+    goBack() {
+      webContainer.current?.canGoBack() && webContainer.current?.goBack();
+    }
+    goForward() {
+      webContainer.current?.canGoForward() && webContainer.current?.goForward();
+    }
+  }
+
+  const myRef = useRef(null);
+  const webContainer = useRef(null);
 
   return (
     <React.Fragment>
@@ -36,11 +51,15 @@ export default function HomePage(props: any) {
           <div className="titlebar grow "></div>
           <WindowControls URLArray={URLArray} setURLArray={setURLArray} />
         </div>
-        <BrowserControls URLArray={URLArray} setURLArray={setURLArray} />
+        <BrowserControls
+          URLArray={URLArray}
+          setURLArray={setURLArray}
+          PageControls={new PageControls()}
+        />
         <webview
-          id="foo"
+          ref={webContainer}
           className="grow"
-          src="https://www.github.com/"
+          src={URLArray[0]}
         ></webview>
       </div>
     </React.Fragment>

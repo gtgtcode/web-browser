@@ -51,18 +51,6 @@ app.whenReady().then(() => {
       console.error("Error emitting navigated-url event:", error);
     }
   });
-
-  ipcMain.on("refresh-page", () => {
-    webWindow.webContents.reload();
-  });
-
-  ipcMain.on("go-back", () => {
-    webWindow.webContents.canGoBack() && webWindow.webContents.goBack();
-  });
-
-  ipcMain.on("go-forward", () => {
-    webWindow.webContents.canGoForward() && webWindow.webContents.goForward();
-  });
 });
 
 app.on("window-all-closed", () => {

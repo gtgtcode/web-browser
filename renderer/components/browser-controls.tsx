@@ -1,9 +1,16 @@
 import { Button, Input } from "antd";
 import { useEffect, useState } from "react";
 
+interface PageControlsClass {
+  refreshPage(): void;
+  goBack(): void;
+  goForward(): void;
+}
+
 export default function BrowserControls(props: {
   URLArray: string[];
   setURLArray: React.Dispatch<React.SetStateAction<string[]>>;
+  PageControls: PageControlsClass;
 }) {
   const [URLInput, setURLInput] = useState("https://www.google.com");
 
@@ -31,7 +38,7 @@ export default function BrowserControls(props: {
             type="text"
             shape="circle"
             className="opacity-50 hover:opacity-100 b-minimize"
-            onClick={() => window.ipc.send("go-back", "")}
+            onClick={() => props.PageControls.goBack()}
           >
             <img
               src="/images/arrow-back.svg"
@@ -44,7 +51,7 @@ export default function BrowserControls(props: {
             type="text"
             shape="circle"
             className="opacity-50 hover:opacity-100 b-minimize"
-            onClick={() => window.ipc.send("go-forward", "")}
+            onClick={() => props.PageControls.goForward()}
           >
             <img
               src="/images/arrow-forward.svg"
@@ -57,7 +64,7 @@ export default function BrowserControls(props: {
             type="text"
             shape="circle"
             className="opacity-50 hover:opacity-100 b-minimize"
-            onClick={() => window.ipc.send("refresh-page", "")}
+            onClick={() => props.PageControls.refreshPage()}
           >
             <img
               src="/images/refresh.svg"
