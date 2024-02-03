@@ -25,6 +25,7 @@ let mainWindow;
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
+      webviewTag: true,
     },
   });
 
@@ -41,10 +42,6 @@ let webWindow;
 
 app.whenReady().then(() => {
   webWindow = new BrowserView();
-  mainWindow.setBrowserView(webWindow);
-  webWindow.setBounds({ x: 0, y: 92, width: 1000, height: 508 });
-  webWindow.setAutoResize({ width: true, height: true });
-  webWindow.webContents.loadURL("https://google.com");
 
   webWindow.webContents.on("did-start-navigation", (event, value) => {
     try {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "antd";
 
-import { ipcRenderer } from "electron";
+import { ipcMain, ipcRenderer } from "electron";
 import { dragTabs } from "drag-tabs";
 import WindowControls from "../components/window-controls";
 import BrowserControls from "../components/browser-controls";
@@ -22,20 +22,27 @@ export default function HomePage(props: any) {
       <Head>
         <title>Browser</title>
       </Head>
-      <div className="flex flex-row w-full">
-        <div className="flex gap-1 ml-4 grow " id="tabs">
-          {URLArray.map((index) => (
-            <TabTemplate
-              URLArray={URLArray}
-              setURLArray={setURLArray}
-              index={index}
-            />
-          ))}
+      <div className="h-screen flex flex-col">
+        <div className="flex flex-row w-full">
+          <div className="flex gap-1 ml-4 grow max-h-[40px]" id="tabs">
+            {URLArray.map((index) => (
+              <TabTemplate
+                URLArray={URLArray}
+                setURLArray={setURLArray}
+                index={index}
+              />
+            ))}
+          </div>
+          <div className="titlebar grow "></div>
+          <WindowControls URLArray={URLArray} setURLArray={setURLArray} />
         </div>
-        <div className="titlebar grow "></div>
-        <WindowControls URLArray={URLArray} setURLArray={setURLArray} />
+        <BrowserControls URLArray={URLArray} setURLArray={setURLArray} />
+        <webview
+          id="foo"
+          className="grow"
+          src="https://www.github.com/"
+        ></webview>
       </div>
-      <BrowserControls URLArray={URLArray} setURLArray={setURLArray} />
     </React.Fragment>
   );
 }

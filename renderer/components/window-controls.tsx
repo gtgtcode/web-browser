@@ -5,7 +5,7 @@ export default function WindowControls(props: {
   setURLArray: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
   return (
-    <div className="p-2 text-nowrap">
+    <div className="p-2 text-nowrap max-h-[40px]">
       {" "}
       <Button
         type="text"

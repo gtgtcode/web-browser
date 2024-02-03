@@ -20,7 +20,7 @@ export default function TabTemplate(props: {
   getURLTitle(props.index);
 
   return (
-    <div className="bg-zinc-700 rounded-t-xl mt-1 pt-1 px-4 max-w-[200px] relative basis-80 overflow-hidden">
+    <div className="bg-zinc-700 rounded-t-xl mt-1 pt-1 px-4 max-w-[200px] relative basis-80 overflow-hidden max-h-[40px]">
       <div className="align-middle inline-block">
         <div className="inline select-none drag-none text-nowrap">
           <img
