@@ -1,5 +1,5 @@
 import { Button, Input } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface PageControlsClass {
   refreshPage(): void;
@@ -28,6 +28,10 @@ export default function BrowserControls(props: {
       window.ipc.send("navigate-to", inputURL);
     }
   };
+
+  useEffect(() => {
+    setURLInput(props.URLArray[0]);
+  }, [props.URLArray]);
 
   return (
     <div>

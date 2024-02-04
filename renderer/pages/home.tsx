@@ -11,11 +11,7 @@ import BrowserControls from "../components/browser-controls";
 import TabTemplate from "../components/tab-template";
 
 export default function HomePage(props: any) {
-  const [URLArray, setURLArray] = useState<string[]>([
-    "https://google.com",
-    "https://facebook.com",
-    "https://google.com",
-  ]);
+  const [URLArray, setURLArray] = useState<string[]>(["https://google.com"]);
 
   class PageControls {
     refreshPage() {
@@ -27,10 +23,28 @@ export default function HomePage(props: any) {
     goForward() {
       webContainer.current?.canGoForward() && webContainer.current?.goForward();
     }
+    getTitle() {
+      const title = webContainer.current?.getTitle();
+      return title;
+    }
   }
 
   const myRef = useRef(null);
+
   const webContainer = useRef(null);
+  useEffect(() => {
+    // Everything around if statement
+    if (webContainer && webContainer.current) {
+      webContainer.current.addEventListener("load-commit", () => {
+        setURLArray([webContainer.current?.getURL()]);
+        console.log("working");
+      });
+
+      return () => {
+        webContainer.current.removeEventListener("load-commit");
+      };
+    }
+  }, [webContainer]);
 
   return (
     <React.Fragment>
@@ -45,6 +59,7 @@ export default function HomePage(props: any) {
                 URLArray={URLArray}
                 setURLArray={setURLArray}
                 index={index}
+                PageControls={new PageControls()}
               />
             ))}
           </div>
