@@ -5,14 +5,17 @@ interface PageControlsClass {
   refreshPage(): void;
   goBack(): void;
   goForward(): void;
+  getURL(index: number): any;
 }
 
 export default function BrowserControls(props: {
   URLArray: string[];
-  setURLArray: React.Dispatch<React.SetStateAction<string[]>>;
+  setURLArray: any;
   PageControls: PageControlsClass;
+  webContainer: any;
+  activeTab: number;
 }) {
-  const [URLInput, setURLInput] = useState("https://www.google.com");
+  const [URLInput, setURLInput] = useState("");
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -24,14 +27,44 @@ export default function BrowserControls(props: {
         // If the URL doesn't start with http:// or https://, prepend https://
         inputURL = "https://" + inputURL;
       }
-      props.setURLArray([inputURL]);
-      window.ipc.send("navigate-to", inputURL);
+      props.setURLArray(() => {
+        const newArray = [props.URLArray];
+        newArray[props.activeTab] = [inputURL];
+
+        return newArray;
+      });
     }
   };
 
   useEffect(() => {
-    setURLInput(props.URLArray[0]);
-  }, [props.URLArray]);
+    setURLInput(props.PageControls.getURL(props.activeTab));
+    console.log(props.URLArray);
+  }, [props.URLArray, props.activeTab]);
+
+  useEffect(() => {
+    // Everything around if statement
+    if (props.webContainer && props.webContainer.current) {
+      props.webContainer.current[props.activeTab].addEventListener(
+        "load-commit",
+        () => {
+          props.setURLArray(() => {
+            const newArray = [props.URLArray];
+            newArray[props.activeTab] = [
+              props.webContainer.current[props.activeTab].getURL(),
+            ];
+
+            return newArray;
+          });
+        }
+      );
+
+      return () => {
+        props.webContainer.current[props.activeTab].removeEventListener(
+          "load-commit"
+        );
+      };
+    }
+  }, [props.webContainer]);
 
   return (
     <div>
